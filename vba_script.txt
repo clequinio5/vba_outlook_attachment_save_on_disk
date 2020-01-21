@@ -1,0 +1,43 @@
+Public Sub saveAttachtoDisk(itm As Outlook.MailItem)
+
+Dim objAtt As Outlook.Attachment
+Dim attNameLowerCase As String
+Dim saveFolder As String
+
+Dim spl() As String
+Dim ext
+Dim pltf As String
+Dim name As String
+Dim strDate As String
+
+saveFolder = "C:\Users\clequinio\Desktop\attach_outlook"
+
+     For Each objAtt In itm.Attachments
+          
+          attNameLowerCase = LCase(objAtt.DisplayName)
+          If InStr(attNameLowerCase, "lesjeudis") <> 0 Or InStr(attNameLowerCase, "image") <> 0 Or (InStr(attNameLowerCase, "java") <> 0 And InStr(attNameLowerCase, "freelance") <> 0) Then
+            
+            'CV pas interessant, ne fait rien
+            
+          Else
+          
+            If InStr(attNameLowerCase, "monster") <> 0 Or InStr(attNameLowerCase, "apec") <> 0 Then
+                
+                spl = Split(objAtt.FileName, "_")
+                pltf = UCase(spl(1))
+                name = ""
+                For i = 2 To UBound(spl)
+                    name = name & " " & spl(i)
+                Next
+                strDate = Format(itm.ReceivedTime, "yyyymmdd")
+                
+                objAtt.SaveAsFile saveFolder & "\" & strDate & "_" & pltf & "_" & name
+                Set objAtt = Nothing
+            
+            End If
+            
+          End If
+          
+     Next
+     
+End Sub
